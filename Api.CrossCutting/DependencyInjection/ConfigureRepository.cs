@@ -13,7 +13,7 @@ namespace Api.CrossCutting.DependencyInjection
             serviceCollection.AddScoped(typeof(IRepository<>), typeof(BaseRepository<>));
 
             serviceCollection.AddDbContext<MyContext>(
-                options => options.UseMySql("Server=localhost;Port=3306;Database=Jobis;Uid=jonathandetoni;Pwd=Ton!960427")
+                options => options.UseMySql("Server=localhost;Port=3306;Database=dbapi;Uid=root;Pwd=root")
             );
         }
     }
