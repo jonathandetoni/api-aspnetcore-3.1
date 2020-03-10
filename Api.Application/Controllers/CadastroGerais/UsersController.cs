@@ -5,7 +5,7 @@ using Api.Domain.Entities.CadastrosGerais;
 using Api.Domain.Interfaces.Service.CadastrosGerais.User;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Api.Application.Controllers
+namespace Api.Application.Controllers.CadastrosGerais
 {
     [Route("api/[controller]")]
     [ApiController]
