@@ -9,7 +9,7 @@ namespace Api.Data.Mapping
         public void Configure(EntityTypeBuilder<UserEntity> builder)
         {
             //Nome da Tabela
-            builder.ToTable("User");
+            builder.ToTable("user");
 
             //Chave primaria
             builder.HasKey(p => p.Id);
