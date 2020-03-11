@@ -9,7 +9,7 @@ namespace Api.Data.Mapping
         public void Configure(EntityTypeBuilder<UserEntity> builder)
         {
             //Nome da Tabela
-            builder.ToTable("User");
+            builder.ToTable("user");
 
             //Chave primaria
             builder.HasKey(p => p.Id);
@@ -18,13 +18,13 @@ namespace Api.Data.Mapping
             builder.HasIndex(p => p.Email)
                 .IsUnique();
 
-            //Propriedades
-            builder.Property(u => u.Nome)
-                .HasMaxLength(100);
-
             builder.Property(u => u.Email)
                 .IsRequired()
                 .HasMaxLength(100);
+
+            builder.Property(u => u.SenhaHash);
+
+            builder.Property(u => u.SenhaSalt);
         }
     }
 }
