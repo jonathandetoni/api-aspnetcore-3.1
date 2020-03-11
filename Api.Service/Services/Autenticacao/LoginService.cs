@@ -43,17 +43,21 @@ namespace Api.Service.Services.Autenticacao
                     return new
                     {
                         authenticated = false,
-                        message = "Falha ao autenticar"
+                        message = "Falha ao autenticar!"
                     };
                 }
                 else
                 {
+                    // check if password is correct
+                    if (!VerifyPasswordHash(user.Senha, baseUser.SenhaHash, baseUser.SenhaSalt))
+                        return null;
+
                     var identity = new ClaimsIdentity(
                         new GenericIdentity(user.Email),
                         new[]
                         {
-                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()), //jti O id do token
-                    new Claim(JwtRegisteredClaimNames.UniqueName, user.Email),
+                            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()), //jti O id do token
+                            new Claim(JwtRegisteredClaimNames.UniqueName, user.Email),
                         }
                     );
                     DateTime createDate = DateTime.Now;
@@ -99,9 +103,39 @@ namespace Api.Service.Services.Autenticacao
                 expiration = expirationDate.ToString("yyyy-MM-dd HH:mm:ss"),
                 acessToken = token,
                 userName = user.Email,
-                name = user.Nome,
-                message = "Usuário Logado com sucesso"
+                message = "Usuário Logado com sucesso!"
             };
+        }
+
+        public void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
+        {
+            if (password == null) throw new ArgumentNullException("password");
+            if (string.IsNullOrWhiteSpace(password)) throw new ArgumentException("Value cannot be empty or whitespace only string.", "password");
+
+            using (var hmac = new System.Security.Cryptography.HMACSHA512())
+            {
+                passwordSalt = hmac.Key;
+                passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+            }
+        }
+
+        public bool VerifyPasswordHash(string password, byte[] storedHash, byte[] storedSalt)
+        {
+            if (password == null) throw new ArgumentNullException("password");
+            if (string.IsNullOrWhiteSpace(password)) throw new ArgumentException("Value cannot be empty or whitespace only string.", "password");
+            if (storedHash.Length != 64) throw new ArgumentException("Invalid length of password hash (64 bytes expected).", "passwordHash");
+            if (storedSalt.Length != 128) throw new ArgumentException("Invalid length of password salt (128 bytes expected).", "passwordHash");
+
+            using (var hmac = new System.Security.Cryptography.HMACSHA512(storedSalt))
+            {
+                var computedHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+                for (int i = 0; i < computedHash.Length; i++)
+                {
+                    if (computedHash[i] != storedHash[i]) return false;
+                }
+            }
+
+            return true;
         }
     }
 }

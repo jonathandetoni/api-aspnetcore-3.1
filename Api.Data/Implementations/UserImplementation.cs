@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using Api.Data.Context;
 using Api.Data.Repository;
 using Api.Domain.Entities.CadastrosGerais;
+using Api.Domain.Interfaces.Service.Autenticacao;
 using Api.Domain.Repository.CadastrosGerais;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,7 +18,16 @@ namespace Api.Data.Implementations
 
         public async Task<UserEntity> FindByLogin(string email)
         {
-            return await _dataset.FirstOrDefaultAsync(u => u.Email.Equals(email));
+            if (string.IsNullOrEmpty(email))
+                return null;
+
+            var user = await _dataset.FirstOrDefaultAsync(u => u.Email.Equals(email));
+
+            // check if username exists
+            if (user == null)
+                return null;
+
+            return user;
         }
     }
 }

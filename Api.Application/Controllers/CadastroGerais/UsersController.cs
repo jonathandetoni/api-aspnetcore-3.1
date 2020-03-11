@@ -1,7 +1,9 @@
 using System;
 using System.Net;
 using System.Threading.Tasks;
+using Api.Domain.Dtos.CadastrosGerais;
 using Api.Domain.Entities.CadastrosGerais;
+using Api.Domain.Interfaces.Service.Autenticacao;
 using Api.Domain.Interfaces.Service.CadastrosGerais.User;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,10 +14,13 @@ namespace Api.Application.Controllers.CadastrosGerais
     public class UsersController : ControllerBase
     {
         private IUserService _service;
+        private ILoginService _loginService;
 
-        public UsersController(IUserService service)
+        public UsersController(IUserService service,
+                               ILoginService loginService)
         {
             _service = service;
+            _loginService = loginService;
         }
 
         [HttpGet]
@@ -56,7 +61,7 @@ namespace Api.Application.Controllers.CadastrosGerais
         }
 
         [HttpPost]
-        public async Task<ActionResult> Post([FromBody] UserEntity user)
+        public async Task<ActionResult> Post([FromBody] UserDto user)
         {
             if (!ModelState.IsValid)
             {
@@ -65,7 +70,19 @@ namespace Api.Application.Controllers.CadastrosGerais
 
             try
             {
-                var result = await _service.Post(user);
+                if (string.IsNullOrWhiteSpace(user.Senha))
+                    return null;
+
+                byte[] passwordHash, passwordSalt;
+                _loginService.CreatePasswordHash(user.Senha, out passwordHash, out passwordSalt);
+
+                UserEntity userEntity = new UserEntity();
+
+                userEntity.Email = user.Email;
+                userEntity.SenhaHash = passwordHash;
+                userEntity.SenhaSalt = passwordSalt;
+
+                var result = await _service.Post(userEntity);
 
                 if (result != null)
                 {
