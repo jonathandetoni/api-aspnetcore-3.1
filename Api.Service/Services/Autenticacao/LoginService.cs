@@ -60,6 +60,7 @@ namespace Api.Service.Services.Autenticacao
                             new Claim(JwtRegisteredClaimNames.UniqueName, user.Email),
                         }
                     );
+
                     DateTime createDate = DateTime.Now;
                     DateTime expirationDate = createDate + TimeSpan.FromSeconds(_tokenConfigurations.Seconds);  //60 segundos = 1 minuto
 
