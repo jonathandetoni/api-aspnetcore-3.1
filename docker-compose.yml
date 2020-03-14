@@ -1,0 +1,13 @@
+version: "3"
+
+services:
+    api-autenticacao:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        environment:
+            - ConnectionStrings:Server=localhost;Port=3306;Database=dbapi;Uid=jonathandetoni;Pwd=Ton!960427;
+        image: architecture_web
+        container_name: api-autenticacao
+        ports:
+            - 5000:80

@@ -1,0 +1,20 @@
+# Pastas
+**/bin
+**/obj
+**/out
+**/.vscode
+**/.vs
+
+# Temps
+*/temp*
+*/*/temp*
+temp?
+
+# Arquiovos de instrução
+*.md
+!README.md
+!README*.md
+README-secret.md
+
+.dotnet
+.Microsoft.DotNet.ImageBuilder
