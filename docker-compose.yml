@@ -3,6 +3,7 @@ version: '3'
 services:
   api-autenticacao:
     image: jonathandetoni/api-autenticacao
+    network_mode: host
     build:
       context: .
       dockerfile: Dockerfile
