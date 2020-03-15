@@ -2,10 +2,9 @@ version: '3'
 
 services:
   api-autenticacao:
-    image: jonathandetoni/api-autenticacao
-    network_mode: host
+    image: api-autenticacao
     build:
       context: .
-      dockerfile: Dockerfile
-    ports: 
-        - "5000:80"
+    ports:
+      - "5000:80"
+    #network_mode: host
