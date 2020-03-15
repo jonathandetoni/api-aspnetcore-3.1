@@ -1,18 +1,9 @@
-version: '2'
- 
+version: '3'
+
 services:
-  app:
+  apicontagem:
+    image: jonathandetoni/api-autenticacao
     build:
-      context:  ./
-      dockerfile: Dockerfile
-  https-portal:
-    image: steveltn/https-portal:1
+      context: .
     ports:
-      - '80:80'
-      - '443:443'
-    links:
-      - app
-    restart: always
-    environment:
-      DOMAINS: 'alpacatracker.com -> http://app:5000'
-      STAGE: 'production'
+      - "5000:80"
