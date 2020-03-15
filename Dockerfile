@@ -21,7 +21,4 @@ RUN dotnet publish ./Api.Application/Application.csproj -c Release -o /out
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1 AS aspnetcore-runtime
 WORKDIR /app
 COPY --from=dotnetcore-build /out .
-EXPOSE 8080/tcp
-ENV ASPNETCORE_URLS http://*:8080
-ENV ASPNETCORE_ENVIRONMENT docker
 ENTRYPOINT ["dotnet", "Application.dll"]
