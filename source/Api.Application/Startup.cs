@@ -36,7 +36,15 @@ namespace Application
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<MyContext>(
-                 options => options.UseMySql(_configuration["ConnectionString:MySQLDevelopment"])
+                options => options.UseMySql($@"Server={_configuration["MYSQL_SERVER"]}; Port={_configuration["MYSQL_PORT"]}; Database={_configuration["MYSQL_DATABASE"]}; Uid={_configuration["MYSQL_USER"]}; Pwd={_configuration["MYSQL_PWD"]}; SslMode={_configuration["MYSQL_SSL_MODE"]}")
+            //options => options.UseMySql(_configuration["ConnectionString: MySQLDevelopment"])
+            //Server=db-mysql-nyc1-34845-do-user-6457165-0.a.db.ondigitalocean.com;Port=25060;Database=defaultdb;Uid=doadmin;Pwd=n4xubi1okqf88o8d;SslMode=REQUIRED
+            // "MYSQL_SERVER": "",
+            // "MYSQL_PORT": "",
+            // "MYSQL_DATABASE": "",
+            // "MYSQL_USER": "",
+            // "MYSQL_PWD": ""
+            // "MYSQL_SSL_MODE": ""
             );
 
             ConfigureService.ConfigureDependenciesService(services);
