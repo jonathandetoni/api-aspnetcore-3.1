@@ -38,8 +38,8 @@ namespace Application
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<MyContext>(
-                //options => options.UseMySql($@"Server={_configuration["MYSQL_SERVER"]}; Port={_configuration["MYSQL_PORT"]}; Database={_configuration["MYSQL_DATABASE"]}; Uid={_configuration["MYSQL_USER"]}; Pwd={_configuration["MYSQL_PWD"]}; SslMode={_configuration["MYSQL_SSL_MODE"]}")
-                options => options.UseMySql("Server=localhost;Port=3306;Database=Jobis;Uid=jonathandetoni;Pwd=Ton!960427")
+                options => options.UseMySql($@"Server={_configuration["MYSQL_SERVER"]}; Port={_configuration["MYSQL_PORT"]}; Database={_configuration["MYSQL_DATABASE"]}; Uid={_configuration["MYSQL_USER"]}; Pwd={_configuration["MYSQL_PWD"]}; SslMode={_configuration["MYSQL_SSL_MODE"]}")
+                //options => options.UseMySql("Server=localhost;Port=3306;Database=dbname;Uid=root;Pwd=root")
             );
 
             ConfigureService.ConfigureDependenciesService(services);
