@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using Api.CrossCutting.DependencyInjection;
+using Api.CrossCutting.Mappings;
 using Api.Data.Context;
 using Api.Domain.Security;
+using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -20,6 +22,7 @@ namespace Application
     public class Startup
     {
         public IConfiguration _configuration { get; }
+        public string connectionString { get; private set; }
         public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             _configuration = configuration;
@@ -30,25 +33,36 @@ namespace Application
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 .AddEnvironmentVariables();
             _configuration = builder.Build();
+
+            if (env.IsDevelopment())
+            {
+                connectionString = $@"Server=localhost;Port=3306;Database={_configuration["ConnectionString:MYSQL_DATABASE"]};Uid={_configuration["ConnectionString:MYSQL_USER"]};Pwd={_configuration["ConnectionString:MYSQL_PWD"]}";
+            }
+            else
+            {
+                connectionString = $@"Server={_configuration["MYSQL_SERVER"]}; Port={_configuration["MYSQL_PORT"]}; Database={_configuration["MYSQL_DATABASE"]}; Uid={_configuration["MYSQL_USER"]}; Pwd={_configuration["MYSQL_PWD"]}; SslMode={_configuration["MYSQL_SSL_MODE"]}";
+            }
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<MyContext>(
-                options => options.UseMySql($@"Server={_configuration["MYSQL_SERVER"]}; Port={_configuration["MYSQL_PORT"]}; Database={_configuration["MYSQL_DATABASE"]}; Uid={_configuration["MYSQL_USER"]}; Pwd={_configuration["MYSQL_PWD"]}; SslMode={_configuration["MYSQL_SSL_MODE"]}")
-            //options => options.UseMySql(_configuration["ConnectionString: MySQLDevelopment"])
-            //Server=db-mysql-nyc1-34845-do-user-6457165-0.a.db.ondigitalocean.com;Port=25060;Database=defaultdb;Uid=doadmin;Pwd=n4xubi1okqf88o8d;SslMode=REQUIRED
-            // "MYSQL_SERVER": "",
-            // "MYSQL_PORT": "",
-            // "MYSQL_DATABASE": "",
-            // "MYSQL_USER": "",
-            // "MYSQL_PWD": ""
-            // "MYSQL_SSL_MODE": ""
+                options => options.UseMySql(connectionString)
             );
 
             ConfigureService.ConfigureDependenciesService(services);
             ConfigureRepository.ConfigureDependenciesRepository(services);
+
+            var config = new AutoMapper.MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile(new DtoToModelProfile());
+                cfg.AddProfile(new EntityToDtoProfile());
+                cfg.AddProfile(new ModelToEntityProfile());
+            });
+
+            IMapper mapper = config.CreateMapper();
+            services.AddSingleton(mapper);
 
             var signingConfigurations = new SigningConfigurations();
             services.AddSingleton(signingConfigurations);

@@ -1,17 +1,16 @@
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS dotnetcore-sdk
-WORKDIR /source
 
 # Copy csproj and restore as distinct layers
-COPY source/Api.Application/Application.csproj ./Api.Application/
-COPY source/Api.CrossCutting/CrossCutting.csproj ./Api.CrossCutting/
-COPY source/Api.Data/Data.csproj ./Api.Data/
-COPY source/Api.Domain/Domain.csproj ./Api.Domain/
-COPY source/Api.Service/Service.csproj ./Api.Service/
+COPY Api.Application/Application.csproj ./Api.Application/
+COPY Api.CrossCutting/CrossCutting.csproj ./Api.CrossCutting/
+COPY Api.Data/Data.csproj ./Api.Data/
+COPY Api.Domain/Domain.csproj ./Api.Domain/
+COPY Api.Service/Service.csproj ./Api.Service/
 
-RUN dotnet restore ./Api.Application/Application.csproj
+RUN dotnet restore /Api.Application/Application.csproj
 
 # Copy everything else and build
-COPY source ./
+COPY . ./
 
 # .NET Core Build and Publish
 FROM dotnetcore-sdk AS dotnetcore-build

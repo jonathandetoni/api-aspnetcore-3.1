@@ -1,7 +1,7 @@
 using System;
 using System.Net;
 using System.Threading.Tasks;
-using Api.Domain.Dtos.CadastrosGerais;
+using Api.Domain.Dtos.CadastrosGerais.User;
 using Api.Domain.Entities.CadastrosGerais;
 using Api.Domain.Interfaces.Service.Autenticacao;
 using Api.Domain.Interfaces.Service.CadastrosGerais.User;
@@ -78,15 +78,14 @@ namespace Api.Application.Controllers.CadastrosGerais
                     return null;
 
                 byte[] passwordHash, passwordSalt;
+
                 _loginService.CreatePasswordHash(user.Senha, out passwordHash, out passwordSalt);
 
-                UserEntity userEntity = new UserEntity();
+                user.Email = user.Email;
+                //user.SenhaHash = passwordHash;
+                //user.SenhaSalt = passwordSalt;
 
-                userEntity.Email = user.Email;
-                userEntity.SenhaHash = passwordHash;
-                userEntity.SenhaSalt = passwordSalt;
-
-                var result = await _service.Post(userEntity);
+                var result = await _service.Post(user);
 
                 if (result != null)
                 {
@@ -105,7 +104,7 @@ namespace Api.Application.Controllers.CadastrosGerais
 
         [Authorize("Bearer")]
         [HttpPut]
-        public async Task<ActionResult> Put([FromBody] UserEntity user)
+        public async Task<ActionResult> Put([FromBody] UserDto user)
         {
             if (!ModelState.IsValid)
             {
