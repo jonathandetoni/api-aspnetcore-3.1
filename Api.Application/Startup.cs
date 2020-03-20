@@ -22,6 +22,7 @@ namespace Application
     public class Startup
     {
         public IConfiguration _configuration { get; }
+        public string connectionString { get; private set; }
         public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             _configuration = configuration;
@@ -32,14 +33,22 @@ namespace Application
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 .AddEnvironmentVariables();
             _configuration = builder.Build();
+
+            if (env.IsDevelopment())
+            {
+                connectionString = $@"Server=localhost;Port=3306;Database={_configuration["ConnectionString:MYSQL_DATABASE"]};Uid={_configuration["ConnectionString:MYSQL_USER"]};Pwd={_configuration["ConnectionString:MYSQL_PWD"]}";
+            }
+            else
+            {
+                connectionString = $@"Server={_configuration["MYSQL_SERVER"]}; Port={_configuration["MYSQL_PORT"]}; Database={_configuration["MYSQL_DATABASE"]}; Uid={_configuration["MYSQL_USER"]}; Pwd={_configuration["MYSQL_PWD"]}; SslMode={_configuration["MYSQL_SSL_MODE"]}";
+            }
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<MyContext>(
-                options => options.UseMySql($@"Server={_configuration["MYSQL_SERVER"]}; Port={_configuration["MYSQL_PORT"]}; Database={_configuration["MYSQL_DATABASE"]}; Uid={_configuration["MYSQL_USER"]}; Pwd={_configuration["MYSQL_PWD"]}; SslMode={_configuration["MYSQL_SSL_MODE"]}")
-                //options => options.UseMySql("Server=localhost;Port=3306;Database=dbname;Uid=root;Pwd=root")
+                options => options.UseMySql(connectionString)
             );
 
             ConfigureService.ConfigureDependenciesService(services);
