@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Api.Domain.Dtos.CadastrosGerais.User;
+using Api.Domain.Dtos.CadastrosGerais.User.Results;
 using Api.Domain.Entities.CadastrosGerais;
 using Api.Domain.Interfaces.Service.Autenticacao;
 using Api.Domain.Interfaces.Service.CadastrosGerais.User;

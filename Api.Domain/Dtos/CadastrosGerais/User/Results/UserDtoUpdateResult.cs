@@ -1,6 +1,6 @@
 using System;
 
-namespace Api.Domain.Dtos.CadastrosGerais.User
+namespace Api.Domain.Dtos.CadastrosGerais.User.Results
 {
     public class UserDtoUpdateResult
     {
