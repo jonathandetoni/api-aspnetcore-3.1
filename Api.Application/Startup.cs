@@ -22,7 +22,7 @@ namespace Application
     public class Startup
     {
         public IConfiguration _configuration { get; }
-        public string connectionString { get; private set; }
+        public static string connectionString { get; private set; }
         public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             _configuration = configuration;
