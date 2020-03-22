@@ -2,7 +2,6 @@ using System;
 using System.Net;
 using System.Threading.Tasks;
 using Api.Domain.Dtos.CadastrosGerais.User;
-using Api.Domain.Entities.CadastrosGerais;
 using Api.Domain.Interfaces.Service.Autenticacao;
 using Api.Domain.Interfaces.Service.CadastrosGerais.User;
 using Microsoft.AspNetCore.Authorization;
@@ -74,6 +73,18 @@ namespace Api.Application.Controllers.CadastrosGerais
 
             try
             {
+                if (string.IsNullOrWhiteSpace(user.Email))
+                    return null;
+
+                if (await _service.CheckExistingEmail(user.Email))
+                {
+                    return BadRequest(new
+                    {
+                        Message = "E-mail já cadastrado!"
+                    });
+                }
+
+
                 if (string.IsNullOrWhiteSpace(user.Senha))
                     return null;
 
@@ -82,8 +93,6 @@ namespace Api.Application.Controllers.CadastrosGerais
                 _loginService.CreatePasswordHash(user.Senha, out passwordHash, out passwordSalt);
 
                 user.Email = user.Email;
-                //user.SenhaHash = passwordHash;
-                //user.SenhaSalt = passwordSalt;
 
                 var result = await _service.Post(user);
 

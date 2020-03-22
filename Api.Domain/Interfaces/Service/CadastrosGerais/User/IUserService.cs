@@ -13,5 +13,6 @@ namespace Api.Domain.Interfaces.Service.CadastrosGerais.User
         Task<UserDtoCreateResult> Post(UserDto user);
         Task<UserDtoUpdateResult> Put(UserDto user);
         Task<bool> Delete(Guid id);
+        Task<bool> CheckExistingEmail(string email);
     }
 }

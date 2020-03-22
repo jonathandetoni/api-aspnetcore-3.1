@@ -29,5 +29,20 @@ namespace Api.Data.Implementations
 
             return user;
         }
+
+        public async Task<bool> CheckExistingEmail(string email)
+        {
+            if (string.IsNullOrEmpty(email))
+                return false;
+
+            var result = await _dataset.AnyAsync(u => u.Email.Equals(email));
+
+            if (result)
+            {
+                return true;
+            }
+
+            return false;
+        }
     }
 }

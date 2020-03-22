@@ -38,6 +38,7 @@ namespace Api.Service.Services.Autenticacao
             if (user != null && !string.IsNullOrWhiteSpace(user.Email))
             {
                 baseUser = await _repository.FindByLogin(user.Email);
+
                 if (baseUser == null)
                 {
                     return new
@@ -74,7 +75,7 @@ namespace Api.Service.Services.Autenticacao
                 return new
                 {
                     authenticated = false,
-                    message = "Falha ao autenticar"
+                    message = "Falha ao autenticar!"
                 };
             }
         }
