@@ -8,8 +8,10 @@ namespace Api.CrossCutting.Mappings
     {
         public DtoToModelProfile()
         {
-            #region Cadastros Gerais
-            CreateMap<UserModel, UserDto>().ReverseMap();
+            #region Cadastros Gerais - User
+            CreateMap<UserModel, UserDtoList>().ReverseMap();
+            CreateMap<UserModel, UserDtoCreate>().ReverseMap();
+            CreateMap<UserModel, UserDtoUpdate>().ReverseMap();
             #endregion
         }
     }

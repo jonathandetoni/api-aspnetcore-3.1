@@ -12,7 +12,9 @@ namespace Api.CrossCutting.Mappings
             #region Cadastro Gerais 
 
             #region User
-            CreateMap<UserDto, UserEntity>().ReverseMap();
+            CreateMap<UserDtoList, UserEntity>().ReverseMap();
+            CreateMap<UserDtoCreate, UserEntity>().ReverseMap();
+            CreateMap<UserDtoUpdate, UserEntity>().ReverseMap();
             CreateMap<UserDtoCreateResult, UserEntity>().ReverseMap();
             CreateMap<UserDtoUpdateResult, UserEntity>().ReverseMap();
             #endregion

@@ -8,10 +8,10 @@ namespace Api.Domain.Interfaces.Service.CadastrosGerais.User
 {
     public interface IUserService
     {
-        Task<UserDto> Get(Guid id);
-        Task<IEnumerable<UserDto>> GetAll();
-        Task<UserDtoCreateResult> Post(UserDto user);
-        Task<UserDtoUpdateResult> Put(UserDto user);
+        Task<UserDtoList> Get(Guid id);
+        Task<IEnumerable<UserDtoList>> GetAll();
+        Task<UserDtoCreateResult> Post(UserDtoCreate user);
+        Task<UserDtoUpdateResult> Put(UserDtoUpdate user);
         Task<bool> Delete(Guid id);
         Task<bool> CheckExistingEmail(string email);
     }

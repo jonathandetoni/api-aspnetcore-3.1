@@ -33,21 +33,21 @@ namespace Api.Service.Services.CadastrosGerais
             return await _userRepository.DeleteAsync(id);
         }
 
-        public async Task<UserDto> Get(Guid id)
+        public async Task<UserDtoList> Get(Guid id)
         {
             var entity = await _userRepository.SelectAsync(id);
 
-            return _mapper.Map<UserDto>(entity);
+            return _mapper.Map<UserDtoList>(entity);
         }
 
-        public async Task<IEnumerable<UserDto>> GetAll()
+        public async Task<IEnumerable<UserDtoList>> GetAll()
         {
             var listEntity = await _userRepository.SelectAsync();
 
-            return _mapper.Map<IEnumerable<UserDto>>(listEntity);
+            return _mapper.Map<IEnumerable<UserDtoList>>(listEntity);
         }
 
-        public async Task<UserDtoCreateResult> Post(UserDto user)
+        public async Task<UserDtoCreateResult> Post(UserDtoCreate user)
         {
             //Convertendo Dto em uma Model -> Controller para Service
             var model = _mapper.Map<UserModel>(user);
@@ -69,7 +69,7 @@ namespace Api.Service.Services.CadastrosGerais
             return _mapper.Map<UserDtoCreateResult>(result);
         }
 
-        public async Task<UserDtoUpdateResult> Put(UserDto user)
+        public async Task<UserDtoUpdateResult> Put(UserDtoUpdate user)
         {
             var model = _mapper.Map<UserModel>(user);
 
